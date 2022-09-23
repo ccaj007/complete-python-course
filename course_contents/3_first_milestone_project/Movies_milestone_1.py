@@ -25,30 +25,52 @@ def Add_Movie():
 
     return movies
 
-def View_Movies(movies):
+def View_Movies():
     for movie in movies:
-        print(movie)
+        print_movie(movie)
+
+
+def print_movie(m):
+    print(f"Title: {m['title']}")
+    print(f"Director: {m['director']}")
+    print(f"Release year: {m['year']}")
+
 
 def Find_Movie():
     inp = input('enter movie to find: ')
-    if inp in movies["title"]:
-        print(movies["title"], movies["director"], movies["year"])
-    else:
-        print("Movie not found in inventory")
+    for movie in movies:
+        if movie["title"] == inp:
+            print_movie(movie)
+        else:
+            print("Movie not found in inventory")
 
-choice = input(MENU_PROMPT)
-while choice != 'q':
-    if choice.lower() == 'a':
-        Add_Movie()
-    elif choice.lower() == 'v':
-        View_Movies(movies)
-    elif choice.lower() == 'f':
-        Find_Movie()
-    elif choice.lower() == 'q':
-        break
-    else:
-        print('Invalid choice')
 
+user_options = {
+    "a": Add_Movie,
+    "v": View_Movies,
+    "f": Find_Movie
+}
+
+
+def menu():
     choice = input(MENU_PROMPT)
+    while choice != 'q':
+        if choice in user_options:
+            selected_function = user_options[choice]
+            selected_function()
+
+        # if choice.lower() == 'a':
+        #     Add_Movie()
+        # elif choice.lower() == 'v':
+        #     View_Movies(movies)
+        # elif choice.lower() == 'f':
+        #     Find_Movie()
+        # elif choice.lower() == 'q':
+        #     break
+        else:
+            print('Invalid choice')
+
+        choice = input(MENU_PROMPT)
 
 
+menu()

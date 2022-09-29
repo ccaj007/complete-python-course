@@ -11,23 +11,38 @@ Format of the json file:
 ]
 
 """
-import json
-
-books_file = 'books.json'
+import sqlite3
 
 def create_book_table():
-    with open(books_file, 'w') as file:
-        json.dump([], file)
+    connection = sqlite3.connect('data.db')
+    cursor = connection.cursor()
+
+    cursor.execute('CREATE TABLE IF NOT EXISTS books(name text primary key, author text, read integer)')
+
+    connection.commit()
+    connection.close()
 
 
 def add_book(name, author):
-    books = get_all_books()
-    books.append({'name': name, 'author': author, 'read': False})
-    _save_all_books(books)
+    connection = sqlite3.connect('data.db')
+    cursor = connection.cursor()
+
+    cursor.execute('INSERT INTO books VALUES(?, ?, 0)' (name, author))
+
+    connection.commit()
+    connection.close()
+
 
 def get_all_books():
-    with open(books_file, 'r') as file:
-        return json.load(file)
+    connection = sqlite3.connect('data.db')
+    cursor = connection.cursor()
+
+    cursor.execute('SELECT * FROM books')
+    books = [{'nanme': row[0], 'author': row[1], 'read': row[2]} for row in cursor.fetchall()]
+
+    connection.close()
+
+    return books
 
 
 def _save_all_books(books):

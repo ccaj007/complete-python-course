@@ -27,7 +27,7 @@ def add_book(name, author):
     connection = sqlite3.connect('data.db')
     cursor = connection.cursor()
 
-    cursor.execute('INSERT INTO books VALUES(?, ?, 0)' (name, author))
+    cursor.execute('INSERT INTO books VALUES(?, ?, 0)', (name, author))
 
     connection.commit()
     connection.close()
@@ -38,7 +38,7 @@ def get_all_books():
     cursor = connection.cursor()
 
     cursor.execute('SELECT * FROM books')
-    books = [{'nanme': row[0], 'author': row[1], 'read': row[2]} for row in cursor.fetchall()]
+    books = [{'name': row[0], 'author': row[1], 'read': row[2]} for row in cursor.fetchall()]
 
     connection.close()
 
